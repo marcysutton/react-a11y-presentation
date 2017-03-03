@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>CSUN '17 Accessibility and React.js - Marcy Sutton</title>
+
+		<meta name="description" content="A presentation on how React.js impacts accessibility, from user experience to automated testing.">
+		<meta name="author" content="Marcy Sutton">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+
+		<link rel="stylesheet" href="plugin/accessibility-helpers/accessibility-helper.css">
+		<link rel="stylesheet" href="css/theme/custom.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/tomorrow.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+			<div class="slides">
+				<!-- <div class="slide-padding"> -->
+				<section data-background-color="#fff" class="deque-title-slide">
+					<div class="left">
+						<img src="img/deque-logo.png" alt="Deque" class="plain deque">
+					</div>
+					<div class="right">
+						<h1>Explorations in the Virtual DOM: How React.js Impacts Accessibility</h1>
+						<p>
+							By <a href="http://marcysutton.com">Marcy Sutton</a> / <a href="http://twitter.com/marcysutton">@MarcySutton</a><br>
+							Senior Front-End Engineer, Deque Systems
+						</p>
+					</div>
+				</section>
+
+        <section>
+	        <h2 class="h1-style">React.js</h2>
+	        <h3>A JavaScript view-rendering library by Facebook</h3>
+	        <img data-src="img/React.js_logo.png" alt="React logo" style="max-height: 400px;" class="plain">
+        </section>
+
+        <section>
+        	<h3 class="h2-style" style="margin-bottom: 0">The JavaScript Hotness</h3>
+	        <img data-src="img/react-hype.jpg" alt="JavaScript frameworks over the years: each one is 'so hot right now'" class="plain" style="max-width: 750px;">
+        </section>
+
+        <section>
+	        <h3 class="h1-style">What made React.js different</h3>
+	        <ul class="larger">
+		        <li>Virtual DOM</li>
+	        	<li>Component lifecycle</li>
+		        <li>One-way data flow</li>
+		        <li class="fragment">Timing in framework land</li>
+		        <li class="fragment">Developer ergonomics</li>
+	        </ul>
+        </section>
+
+        <section>
+	        <h2 class="h1-style">Accessibility in React Apps</h2>
+	        <ul class="larger">
+		        <li>Virtual DOM</li>
+		        <li>HTML in JS</li>
+		        <li>User-input events</li>
+		        <li>Focus management</li>
+		        <li>Testing</li>
+	        </ul>
+        </section>
+
+        <section data-background-image="img/DOM.png">
+        	<div class="text-background">
+	        	<h3 class="h1-style">Virtual DOM</h3>
+	        	<h4 class="h3-style"><em>An in-memory representation of the <br>Document Object Model<br>(browser render tree)</em></h4>
+	        </div>
+        	<aside class="notes">
+        		The virtual DOM is a tree based on JavaScript objects created with React that mimics a DOM tree. Every time you want to change something in the DOM, React employs a diff algorithm that only re-renders the DOM nodes that have changed. This algorithm is used for efficient re-rendering because DOM operations are typically slow, at least compared to executing JavaScript statements.</aside>
+        </section>
+
+        <section data-background-image="img/virtual-dom.png" data-background-size="contain">
+	        <h2 class="offscreen">Virtual DOM diagram</h2>
+	        <figure class="offscreen"><a href="http://stackoverflow.com/questions/21109361/why-is-reacts-concept-of-virtual-dom-said-to-be-more-performant-than-dirty-mode">Source</a></figure>
+        </section>
+
+        <section>
+        	<h3 class="h2-style">Component Instantiation</h3>
+	        <figure class="code">
+	        	<pre class="large"><code class="javascript">  var AdoptAPetViewer = React.createClass({
+    componentDidMount: function() {},
+
+    componentDidUpdate: function() {},
+
+    render: function() {
+      return (&lt;div>Your Sweet Accessible App&lt;/div>);
+    }
+  });
+  window.addEventListener('DOMContentLoaded', function() {
+    React.render(&lt;AdoptAPetViewer />, document.body);
+  });
+	        	</code></pre>
+	        </figure>
+        </section>
+
+        <section data-background-image="img/react-lifecycle.png" data-background-size="contain">
+	        <h3 class="offscreen">Component lifecycle diagram</h3>
+	        <figure class="offscreen"><a href="https://tylermcginnis.com/an-introduction-to-life-cycle-events-in-react-js/">Source</a>
+
+		       	<div class="offscreen">
+		       		<h4 class="h3-style">Mounting</h4>
+		       		<ul>
+			       		<li>constructor()</li>
+								<li>componentWillMount()</li>
+								<li>render()</li>
+								<li>componentDidMount()</li>
+								<li>componentWillUnmount()</li>
+		       		</ul>
+		       		<h4 class="h3-style">Updating</h4>
+		       		<ul>
+			       		<li>componentWillReceiveProps()</li>
+								<li>shouldComponentUpdate()</li>
+								<li>componentWillUpdate()</li>
+								<li>render()</li>
+								<li>componentDidUpdate()</li>
+		       		</ul>
+		       	</div>
+	       	</figure>
+        </section>
+
+        <section style="padding-top: 0 !important;">
+	        <h3 class="h2-style" style="margin-bottom: 0;"> HTML in JS</h3>
+	        <figure class="code">
+						<figcaption>https://github.com/davidtheclark/react-aria-menubutton</figcaption>
+	        	<pre><code class="javascript">  import { Wrapper, Button, Menu, MenuItem } from '../..';
+
+  render() {
+    return (
+      &lt;Wrapper
+        className='AriaMenuButton'
+        onSelection={this.handleSelection.bind(this)}
+      >
+        &lt;Button className='AriaMenuButton-trigger'>
+          Select a word
+        &lt;/Button>
+        &lt;Menu>
+          &lt;ul className='AriaMenuButton-menu'>
+            {menuItemElements}
+          &lt;/ul>
+        &lt;/Menu>
+      &lt;/Wrapper>
+    );
+  }
+						</code></pre>
+					</figure>
+        </section>
+
+        <section style="padding-top: 0 !important;">
+	        <h3 class="h2-style" style="margin: 0;">A component under the hood</h3>
+	        <figure class="code">
+						<figcaption><a href="https://github.com/davidtheclark/react-aria-menubutton">https://github.com/davidtheclark/react-aria-menubutton</a></figcaption>
+	        	<pre><code class="javascript">  var React = require('react');
+
+  var checkedProps = {
+    children: React.PropTypes.node.isRequired,
+    disabled: React.PropTypes.bool,
+    tag: React.PropTypes.string,
+  };
+
+  module.exports = React.createClass({
+    displayName: 'AriaMenuButton-Button',
+
+    propTypes: checkedProps,
+
+    contextTypes: {
+      ambManager: React.PropTypes.object.isRequired,
+    },
+
+    getDefaultProps: function() {
+      return { tag: 'span' };
+    },
+
+    componentWillMount: function() {
+      this.context.ambManager.button = this;
+    },
+
+    componentWillUnmount: function() {
+      this.context.ambManager.destroy();
+    },
+
+    handleKeyDown: function(event) {
+      if (this.props.disabled) return;
+
+      var ambManager = this.context.ambManager;
+
+      switch (event.key) {
+        case 'ArrowDown':
+          event.preventDefault();
+          if (!ambManager.isOpen) {
+            ambManager.openMenu({ focusMenu: true });
+          } else {
+            ambManager.focusItem(0);
+          }
+          break;
+        case 'Enter':
+        case ' ':
+          event.preventDefault();
+          ambManager.toggleMenu();
+          break;
+        case 'Escape':
+          ambManager.handleMenuKey(event);
+          break;
+      }
+    },
+
+    handleClick: function() {
+      if (this.props.disabled) return;
+      this.context.ambManager.toggleMenu();
+    },
+
+    render: function() {
+     var props = this.props;
+
+      var buttonProps = {
+        // "The menu button itself has a role of button."
+        role: 'button',
+        tabIndex: (props.disabled) ? '' : '0',
+        // "The menu button has an aria-haspopup property, 
+        // set to true."
+        'aria-haspopup': true,
+        'aria-expanded': this.context.ambManager.isOpen,
+        'aria-disabled': props.disabled,
+        onKeyDown: this.handleKeyDown,
+        onClick: this.handleClick,
+        onBlur: this.context.ambManager.handleBlur,
+      };
+
+      return React.createElement(
+      	props.tag,
+      	buttonProps,
+      	props.children
+      );
+    },
+  });
+						</code></pre>
+					</figure>
+        </section>
+
+        <section>
+	        <h3 class="h2-style" style="margin-bottom:0;">IDE Linting</h3>
+	        <h4><a href="https://github.com/evcohen/eslint-plugin-jsx-a11y">https://github.com/evcohen/eslint-plugin-jsx-a11y</a></h4>
+	        <figure>
+	        	<img data-src="img/jsx-plugin.png" style="max-width: 1000px;" alt="Eslint plugin for JSX templating and accessibility on Github">
+	        </figure>
+        </section>
+
+        <section>
+        	<h3 class="h2-style" style="margin-bottom: 0;">React-a11y</h3>
+        	<h4><a href="https://github.com/reactjs/react-a11y">https://github.com/reactjs/react-a11y</a></h4>
+	        <figure>
+	        	<img data-src="img/react-a11y.png" alt="Command line warning about a click handler on a DIV">
+	        </figure>
+        </section>
+
+        <section>
+        	<h3 class="h2-style" style="margin-bottom: 0;">React-axe</h3>
+        	<h4><a href="https://github.com/dylanb/react-axe">https://github.com/dylanb/react-axe</a></h4>
+	        <figure>
+	        	<img data-src="img/react-axe.png" style="max-width: 1000px;" alt="React-axe open in the browser">
+	        </figure>
+        </section>
+
+        <section>
+	        <h3 class="h1-style">User-Input Events</h3>
+	        <ul>
+		        <li class="fragment">Virtual DOM</li>
+		        <li class="fragment">Dynamic HTML w/ JS</li>
+		        <li class="fragment">Multiple contexts</li>
+	        </ul>
+        </section>
+
+        <section>
+	        <h3 class="h2-style">
+	        	<span class="subhead">That&rsquo;s a job for:</span>
+	        	Synthetic Event Delegation
+	        </h3>
+	        <figure><img data-src="img/george-castanza-ah-ha.gif" alt="George Castanza has an ah-ha moment"></figure>
+        </section>
+
+        <section data-background-image="img/synthetic-event.png" data-background-position="top center">
+					<h3 class="offscreen">React Synthetic Event documentation</h3>
+					<aside class="notes">Synthetic Events is a cross-browser wrapper of the browser’s native event</aside>
+        </section>
+
+        <section style="padding-top: 0 !important">
+	        <h3 class="h2-style" style="margin-bottom: 0;">Binding Events in React</h3>
+	        <figure class="code">
+	        	<pre><code class="javascript"> let PizzaButton = React.createClass({
+  handleClick(e) {}
+  handleKeyDown(e) {}
+
+  render() {
+    return (
+      &lt;button
+        onClick={this.handleClick}
+        onKeyDown={this.handleKeyDown}
+      >
+        Get Pizza
+      &lt;/button>
+    )
+  }
+ })
+
+ module.exports = PizzaButton
+	        	</code></pre>
+        	</figure>
+        </section>
+
+        <section>
+	        <h3 class="h2-style">
+	        	<span class="subhead">SyntheticEvent</span>
+	        	Things to watch out for:
+	        </h3>
+	        <ul class="large">
+	        	<li class="fragment">Bind to accessible elements</li>
+	        	<li class="fragment"><code>SyntheticEvent</code> is a wrapper utility</li>
+	        	<li class="fragment">Capturing &amp; non-React events</li>
+	        </ul>
+	        <p class="fragment"><a href="https://www.youtube.com/watch?v=dRo_egw7tBc">https://www.youtube.com/watch?v=dRo_egw7tBc</a></p>
+        </section>
+
+        <section>
+	        <h3 class="h1-style" style="margin-bottom:0;">Focus Management</h3>
+	        <p class="subhead">Not unique to React</p>
+	        <figure class="fragment" style="max-width: 70%; margin: 1em auto;"><em><a href="https://www.smashingmagazine.com/2015/05/client-rendered-accessibility/">https://www.smashingmagazine.com/2015/05/client-rendered-accessibility</a></em></figure>
+        </section>
+
+        <section>
+	        <h3>aXe React Devtools Demo</h3>
+	        <figure style="height: 600px;">
+	        	<video data-src="video/axe-devtools-react.mp4" title="aXe-DevTools-React Focus Management Demo" controls width="100%"></video>
+	        </figure>
+        </section>
+
+        <section>
+	        <h3 style="margin-bottom:0;">Code Example 1</h3>
+	        <figure class="code">
+	        	<figcaption><a href="https://facebook.github.io/react/docs/refs-and-the-dom.html">https://facebook.github.io/react/docs/refs-and-the-dom.html</a></figcaption>
+		        <pre><code class="javascript"> class AutoFocusTextInput extends React.Component {
+  componentDidMount() {
+    this.textInput.focus();
+  }
+
+  render() {
+    return (
+      &lt;CustomTextInput
+        ref={(input) => { this.textInput = input; }}
+      />
+    );
+  }
+}
+					</code></pre>
+					</figure>
+        </section>
+
+        <section>
+	        <h3 style="margin-bottom:0;">Code Example 2</h3>
+	        <p class="subhead">By Ryan Florence</p>
+	        <figure class="code">
+	        	<figcaption><a href="https://github.com/facebook/react/issues/1791#issuecomment-82987932">https://github.com/facebook/react/issues/1791</a></figcaption>
+		        <pre><code class="javascript"> this.setState({ gotEmail: true }, () => {
+   this.refs.thanks.getDOMNode().focus();
+  
+   // display a "thank you" for two seconds
+   setTimeout(() => {
+     var focusHasNotMoved =
+       (this.refs.thanks.getDOMNode() ===
+        document.activeElement);
+     this.setState({ gotEmail: false }, () => {
+       if (focusHasNotMoved)
+         this.getDOMNode().focus();
+     });
+   }, 2000);
+ });
+					</code></pre>
+					</figure>
+        </section>
+
+        <section>
+	        <h3 style="margin-bottom:0;">Code Example 3</h3>
+	        <figure class="code">
+	        	<figcaption>Attest DevTools Extension</figcaption>
+		        <pre><code class="javascript">  componentDidUpdate () {
+    // find DOM node in custom component instance
+    const ourNode = ReactDOM.findDOMNode(this)
+    if (document.activeElement && 
+     ourNode.contains(document.activeElement)) {
+     // if focused el is a component child, bail out
+     return
+    }
+    // focus one of our elements
+    ourNode.querySelector('button').focus()
+  }
+		        </code></pre>
+	        </figure>
+        </section>
+
+        <section>
+	        <h3>There are multiple focus management strategies</h3>
+	        <ul>
+		        <li>User input event + focus on refs</li>
+		        <li>Assign focus via component state</li>
+		        <li>Focus on component mount/update</li>
+		        <li class="fragment">Focus layer system (smarter)</li>
+	        </ul>
+	        <aside class="notes">
+	        <ul>
+	        	<li>Use context</li>
+						<li>Focus/blur bubbling and timeouts</li>
+						<li>Pipe ref callbacks down to elements that return HTML</li>
+						<li>Track "focused" things on private component members instead of state</li>
+	        </ul>
+	        </aside>
+        </section>
+
+        <section>
+	        <h2>React.js Testing and Accessibility</h2>
+	        <ul>
+		        <li>Unit tests</li>
+		        <li>Integration tests</li>
+		        <li>Tools</li>
+	        </ul>
+        </section>
+
+        <section data-background-image="img/angular2-test-strategies.png">
+	        <h3 class="offscreen">Three Ways to Test Angular 2 Components by Victor Savkin</h3>
+        </section>
+
+        <section>
+	        <h3>React Unit Tests</h3>
+	        <ul>
+		        <li>Rendering with props/state</li>
+		        <li>Handling interactions</li>
+		        <li>Snapshot testing</li>
+	        </ul>
+	        <aside class="notes">
+	        Developers are obsessed with SPEED. 
+	        </aside>
+	      </section>
+
+	      <section>
+	      	<div class="flexCols">
+			      <div class="halfCol">
+			        <h3>Unit Testing Tools</h3>
+			        <ul>
+			        	<li><a href="https://facebook.github.io/react/docs/test-utils.html">React Test Utils</a></li>
+				        <li><a href="https://github.com/airbnb/enzyme">Enzyme</a></li>
+				        <li><a href="https://facebook.github.io/jest/">Jest</a></li>
+				        <li class="fragment">Also: Mocha, Jasmine, Karma</li>
+				      </ul> 
+				    </div>
+			      <div class="flexCol fragment">
+				      <span style="display: block; font-size: 4em; text-align: center; margin:0 0.5em 0.25em 0;">→</span>
+			        <ul class="smaller">
+				        <li>Simulate Events</li>
+				        <li>Shallow render</li>
+				        <li>Mount components into the DOM</li>
+			        </ul>
+			      </div>
+			    </div>
+        </section>
+
+        <section>
+	        <h3 class="h2-style" style="margin-bottom:0;">Shallow Rendering</h3>
+	        <p class="subhead"><a href="https://facebook.github.io/react/docs/test-utils.html">https://facebook.github.io/react/docs/test-utils.html</a></p>
+	        <blockquote>
+	        Lets you render a component "one level deep" and test what its render method returns, without worrying about child components, which are not instantiated or rendered. Does not require a DOM.</blockquote>
+	        <aside class="notes">
+	        Does not support refs
+	        </aside>
+		    </section>
+
+		    <section>
+			    <h3>Shallow Rendering Example</h3>
+			    <figure class="code">
+			    	<figcaption><a href="https://github.com/davidtheclark/react-aria-menubutton/blob/master/lib/__tests__/Button.test.js">https://github.com/davidtheclark/react-aria-menubutton</a></figcaption>
+				    <pre class="smaller"><code class="javascript"> var shallow = require('enzyme').shallow;
+ 
+ // more code
+
+ it('escape key', function() {
+  var wrapper = shallow(el(Button, null, 'foo'), shallowOptions);
+  wrapper.simulate('keyDown', escapeEvent);
+
+  expect(ambManager.handleMenuKey).toHaveBeenCalledTimes(1);
+  expect(ambManager.handleMenuKey.mock.calls[0][0].key).toBe('Escape');
+ });
+				    </code></pre>
+			    </figure>
+		    </section>
+
+		    <section>
+			    <h3>Accessibility Tests<br>Requiring More than Shallow DOM</h3>
+			    <ul>
+				    <li>Computed name and role</li>
+				    <li>Color contrast</li>
+				    <li>Visible focus state</li>
+				    <li>Focus mgmt with refs</li>
+				    <li>ARIA support*</li>
+			    </ul>
+			  </section>
+
+			  <section data-transition="none">
+			  	<img data-src="img/light-bulb.jpg" alt="light bulb" style="max-width: 180px; margin-top: -50px" class="plain">
+			  	<h3 class="h2-style" style="margin-bottom:0;">Mounted Rendering</h3>
+		  		<p class="subhead">&hellip;attaching code to the DOM</p>
+			    <figure><pre class="large"><code class="javascript">
+  import {mount} from 'enzyme';
+  let wrapper = mount(app, { attachTo: div })
+			    </code></pre></figure>
+		    </section>
+
+        <section>
+	        <h3 style="margin-bottom:0;">Enzyme axe-core test ~ 1 of 2</h3>
+	        <figure class="code">
+	        	<figcaption><a href="http://bit.ly/a11yHelper">http://bit.ly/a11yHelper</a></figcaption>
+		        <pre class="smaller"><code class="javascript">import App from '../app/components/App';
+import a11yHelper from "./a11yHelper";
+
+describe('Accessibility', function () {
+  this.timeout(10000);
+
+  it('Has no errors', function () {
+    let config = {
+      "rules": {
+        "color-contrast": { enabled: false }
+      }
+    };
+    a11yHelper.testEnzymeComponent(&lt;App/>, config, (error, results) => {
+      expect(results.violations.length).to.equal(0);
+    });
+  });
+});
+		        </code></pre>
+		      </figure>
+		      <aside class="notes">
+		      Let's say &lt;App> has a form with an unlabeled input
+		      </aside>
+        </section>
+
+        <section>
+	        <h3 style="margin-bottom:0;">Enzyme axe-core test ~ 2 of 2</h3>
+	        <figure class="code">
+	        	<figcaption><a href="http://bit.ly/a11yHelper">http://bit.ly/a11yHelper</a></figcaption>
+		        <pre class="smaller"><code class="javascript"> a11yHelper.testEnzymeComponent = (app, config, callback) => {
+    let div = document.createElement('div');
+    document.body.appendChild(div);
+
+    let wrapper = mount(app, { attachTo: div });
+    let node = findDOMNode(wrapper.component);
+
+    if (typeof config === 'function') {
+      config = {};
+    }
+    this.runAxe(node, config, callback);
+
+    document.body.removeChild(div);
+ }
+
+ a11yHelper.runAxe = (node, config, callback) => {
+   var oldNode = global.Node;
+   global.Node = node.ownerDocument.defaultView.Node;
+
+   axeCore.run(node, config, (error, results) => {
+     global.Node = oldNode;
+     callback(results);
+   });
+ }
+		        </code></pre>
+		      </figure>
+        </section>
+
+        <section>
+	        <h3>Other Unit Test Considerations</h3>
+	        <ul>
+		        <li>Test individual units</li>
+		        <li>JSDOM platform gaps</li>
+		        <li>Events on inaccessible elements</li>
+	        </ul>
+        </section>
+
+        <section>
+	        <h3 class="h2-style">The dreaded <code>documentElement</code> error</h3>
+	        <figure><img data-src="img/jsdom-mocha-exploded.png" alt="Command line Mocha test stack trace saying documentElement exploded!"></figure>
+        </section>
+
+        <section style="padding-top:0;">
+	        <h3 class="h2-style" style="margin-bottom:0;">The Fix</h3>
+	        <figure class="code">
+	        	<figcaption><a href="http://bit.ly/jsdom-helper">http://bit.ly/jsdom-helper</a></figcaption>
+		        <pre><code class="javascript"> import { jsdom } from 'jsdom'
+ import 'jsdom-global/register'
+
+ export function jsdomSetup () {
+  if (global.document && global.window) {
+    global.document = jsdom('&lt;!doctype html>&lt;html>&lt;body>&lt;/body>&lt;/html>')
+    global.window = global.document.defaultView
+    return
+  }
+
+  // Make all window properties available on the mocha global
+  Object.keys(global.window)
+  .filter(key => !(key in global))
+  .forEach(key => {
+    global[key] = global.window[key]
+  })
+ }
+		        </code></pre>
+	        </figure>
+        </section>
+
+        <section>
+		      <h3 class="h2-style">Integration Tests</h3>
+		      <blockquote>&ldquo;Frontend bugs have occurred in the boundary between components or layers of our app – for example, between the API and the data layer, the data layer and our components, or between a parent and child component.&rdquo;</blockquote>
+        </section>
+
+        <section>
+	        <h3>Integration Test Considerations</h3>
+	        <ul>
+		        <li>Test components together</li>
+		        <li>Slower, more processor heavy</li>
+		        <li>Real browser, accurate results</li>
+		        <li>Webdriver docs are hard to use</li>
+	        </ul>
+        </section>
+
+        <section>
+	        <h3 style="margin-bottom:0;">Testing with axe-webdriverjs <span class="offscreen">1 of 2</span></h3>
+	        <figure class="code">
+        		<figcaption><a href="http://bit.ly/react-axe-webdriver-demo">http://bit.ly/react-axe-webdriver-demo</a></figcaption>
+		        <pre class="smaller"><code class="javascript">{
+  "name": "react-axe-webdriverjs-demo",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "webdriver": "mocha test/test.js"
+  },
+  "devDependencies": {
+    "axe-core": "^2.1.7",
+    "axe-webdriverjs": "^1.0.14",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "react-scripts": "0.8.4"
+  },
+  "dependencies": {
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1"
+  }
+}
+		        </code></pre>
+		      </figure>
+        </section>
+
+        <section>
+	        <h3 style="margin-bottom:0;">Testing with axe-webdriverjs <span class="offscreen">2 of 2</span></h3>
+	        <figure class="code">
+        		<figcaption><a href="http://bit.ly/react-axe-webdriver-demo">http://bit.ly/react-axe-webdriver-demo</a></figcaption>
+		        <pre class="smaller"><code class="javascript"> const WebDriver = require('selenium-webdriver'),
+       AxeBuilder = require('axe-webdriverjs');
+
+ describe('aXe demo', function() {
+    this.timeout(10000);
+    let driver;
+
+    beforeEach(function(done) {
+      driver = new WebDriver.Builder()
+        .forBrowser('chrome')
+        .build();
+      done();
+    });
+
+    afterEach(function(done) {
+      driver.quit().then(function() {
+        done();
+      });
+    });
+
+  it('should find no accessibility violations', function(  done) {
+    driver
+      .get('http://localhost:3000/')
+      .then(function () {
+        new AxeBuilder(driver)
+          .analyze(function (results) {
+            if (results.violations.length > 0) {
+              console.log(results.violations.length + ' Accessibility Violations');
+              console.log(results.violations);
+            }
+            else {
+              console.log('No accessibility violations');
+            }
+            assert.equal(results.violations.length, 0);
+            done();
+          });
+      });
+    });
+ });
+		        </code></pre>
+		      </figure>
+        </section>
+
+        <section>
+	        <h3 class="h1-style">Command-Line Demo</h3>
+        </section>
+
+        <section>
+	        <h3 class="h2-style">React Accessibility Tools</h3>
+	        <ul>
+	        	<li><a href="https://github.com/evcohen/eslint-plugin-jsx-a11y">eslint-plugin-jsx-a11y</a></li>
+		        <li><a href="https://github.com/dylanb/react-axe">React-axe</a></li>
+		        <li><a href="https://github.com/reactjs/react-a11y">React-a11y</a></li>
+		        <li><a href="https://github.com/dequelabs/axe-webdriverjs">axe-webdriverjs</a></li>
+	        </ul>
+        </section>
+
+        <section>
+	        <h3>Blessed React.js Components</h3>
+	        <ul>
+		        <li><a href="http://davidtheclark.com/building-react-aria-menubutton/">react-aria-menubutton</a></li>
+		        <li><a href="https://github.com/reactjs/react-modal">react-modal</a></li>
+		        <li><a href="https://github.com/reactjs/react-autocomplete">react-autocomplete</a></li>
+		        <li><a href="https://github.com/reactjs/react-tabs">react-tabs</a></li>
+	        </ul>
+        </section>
+
+				<section>
+					<h2>Questions?</h2>
+					<h3 class="subhead"><a href="http://twitter.com/marcysutton">twitter.com/marcysutton</a></h3>
+					<h3 class="subhead"><a href="http://github.com/marcysutton">github.com/marcysutton</a></h3>
+					<img data-src="img/deque_logo_600p.jpg" alt="" style="width: 320px;">
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+			    width: '100%',
+			    margin: 0,
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+		        keyboard: {
+		          13: 'next', // go to the next slide when the ENTER key is pressed
+		          27: function() {}/*, // do something custom when ESC is pressed
+		          37: null,
+		          39: null // don't do anything when SPACE is pressed (i.e. disable a reveal.js default binding)*/
+		        },
+
+				transition: 'fade', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/accessibility-helpers/accessibility-helpers.js', async: true}
+				]
+			});
+
+		</script>
+	</body>
+</html>
