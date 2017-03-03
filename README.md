@@ -47,4 +47,4 @@ Some reveal.js features, like external Markdown and speaker notes, require that 
 
 MIT licensed
 
-Copyright (C) 2016 Marcy Sutton, http://marcysutton.com
+Copyright (C) 2017 Marcy Sutton, http://marcysutton.com
