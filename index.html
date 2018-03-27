@@ -46,7 +46,8 @@
 					<h1>Explorations in the Virtual DOM: How React.js Impacts Accessibility</h1>
 					<p>
 						By <a href="http://marcysutton.com">Marcy Sutton</a> / <a href="http://twitter.com/marcysutton">@MarcySutton</a><br>
-						Senior Front-End Engineer, Deque Systems
+						Senior Front-End Engineer, aXe-core team<br>
+						Deque Systems
 					</p>
 				</section>
 
@@ -119,15 +120,15 @@
         </section>
 
         <section>
-        	<h3 class="h2-style">Component Lyfe</h3>
+        	<h3 class="h2-style" style="margin-bottom:0;">Component Lyfe</h3>
 	        <figure class="code">
+	        	<figcaption><a href="https://reactjs.org/docs/react-component.html">https://reactjs.org/docs/react-component.html</a></figcaption>
 	        	<pre class="large"><code class="javascript">  import React from 'react';
   class AdoptAPetViewer extends React.Component {
-    constructor(props) {
-      super(props)
-    }
     componentDidMount: function() {},
+    componentWillUnMount: function() {},
     componentDidUpdate: function() {},
+    componentWillReceiveProps: function() {},
     render() {
       return (&lt;div>Your Sweet Accessible App&lt;/div>)
     }
@@ -139,7 +140,7 @@
 	        </figure>
         </section>
 
-        <section data-background-image="img/react-lifecycle.png" data-background-size="contain">
+        <!-- <section data-background-image="img/react-lifecycle.png" data-background-size="contain">
 	        <h3 class="offscreen">Component lifecycle diagram</h3>
 	        <figure class="offscreen"><a href="https://tylermcginnis.com/an-introduction-to-life-cycle-events-in-react-js/">Source</a>
 
@@ -162,7 +163,7 @@
 		       		</ul>
 		       	</div>
 	       	</figure>
-        </section>
+        </section> -->
 
         <section style="padding-top: 0 !important;">
 	        <h3 class="h2-style" style="margin-bottom: 0;"> HTML in JS</h3>
@@ -191,7 +192,7 @@
 					</figure>
         </section>
 
-        <section style="padding-top: 0 !important;">
+        <!-- <section style="padding-top: 0 !important;">
 	        <h3 class="h2-style" style="margin: 0;">A component under the hood</h3>
 	        <figure class="code">
 						<figcaption><a href="https://github.com/davidtheclark/react-aria-menubutton">https://github.com/davidtheclark/react-aria-menubutton</a></figcaption>
@@ -280,7 +281,7 @@
   module.exports = AriaMenuButtonButton;
 						</code></pre>
 					</figure>
-        </section>
+        </section> -->
 
         <section>
         	<h3 class="h2-style">POUR me a coffee ☕️</h3>
@@ -349,8 +350,8 @@
 	        	Things to watch out for:
 	        </h3>
 	        <ul class="large">
-	        	<li class="fragment">Bind to keyboard-accessible widgets</li>
 	        	<li class="fragment"><code>SyntheticEvent</code> is a wrapper utility</li>
+	        	<li class="fragment">Bind to keyboard-accessible widgets</li>
 	        	<li class="fragment">Capturing &amp; non-React events</li>
 	        </ul>
 	        <p class="fragment"><a href="https://www.youtube.com/watch?v=dRo_egw7tBc">https://www.youtube.com/watch?v=dRo_egw7tBc</a></p>
@@ -360,6 +361,12 @@
 	        <h3 class="h1-style" style="margin-bottom:0;">Focus Management</h3>
 	        <h4>Critical in client-rendered apps</h4>
 	        <figure class="fragment" style="max-width: 70%; margin: 1em auto;"><em><a href="https://www.smashingmagazine.com/2015/05/client-rendered-accessibility/">https://www.smashingmagazine.com/2015/05/client-rendered-accessibility</a></em></figure>
+	        <ul class="fragment">
+	        	<li>Layers/Modals</li>
+	        	<li>Sidenavs</li>
+	        	<li>Tabs</li>
+	        	<li>Menus</li>
+	        </ul>
         </section>
 
         <section>
@@ -452,7 +459,7 @@
 	        </aside>
         </section>
 
-        <section data-background-image="img/keystroke-level-performance.png" data-background-size="50% auto" data-background-position="top center" data-background-color="#fff">
+        <!-- <section data-background-image="img/keystroke-level-performance.png" data-background-size="50% auto" data-background-position="top center" data-background-color="#fff">
         	<h3 class="offscreen">Flipping Performance on its head</h3>
         </section>
 
@@ -505,7 +512,7 @@
 		    	<h3 class="h2-style">Include keyboard support<br>in the <a href="https://developers.google.com/web/fundamentals/performance/critical-rendering-path/?hl=en">critical rendering path</a></h3>
 		    	<img data-src="img/critical_rendering_path.png" alt="Critical Rendering Path diagram" style="max-width: 600px;">
 		    	<p>Prioritize accessible interactions.</p>
-	        </section>
+	        </section> -->
 
         <section>
 	        <h2>Testing and Accessibility</h2>
@@ -516,15 +523,15 @@
 	        </ul>
         </section>
 
-        <section data-background-image="img/angular2-test-strategies.png">
+        <!-- <section data-background-image="img/angular2-test-strategies.png">
 	        <h3 class="offscreen">Three Ways to Test Angular 2 Components by Victor Savkin</h3>
-        </section>
+        </section> -->
 
         <section>
 	        <h3>React Unit Tests</h3>
 	        <ul>
 		        <li>Rendering with props/state</li>
-		        <li>Handling interactions</li>
+		        <li>Interaction APIs</li>
 		        <li>Snapshot testing</li>
 	        </ul>
 	        <aside class="notes">
@@ -532,7 +539,7 @@
 	        </aside>
 	      </section>
 
-	      <section>
+	      <!-- <section>
 	      	<div class="flexCols">
 			      <div class="halfCol">
 			        <h3>Unit Testing Tools</h3>
@@ -552,7 +559,7 @@
 			        </ul>
 			      </div>
 			    </div>
-        </section>
+        </section> -->
 
         <section>
 	        <h3 class="h2-style" style="margin-bottom:0;">Shallow Rendering</h3>
@@ -718,7 +725,7 @@ describe('Accessibility', function () {
 	        </ul>
         </section>
 
-        <section>
+        <!-- <section>
 	        <h3 style="margin-bottom:0;">Testing with axe-webdriverjs <span class="offscreen">1 of 2</span></h3>
 	        <figure class="code">
         		<figcaption><a href="http://bit.ly/react-axe-webdriver-demo">http://bit.ly/react-axe-webdriver-demo</a></figcaption>
@@ -749,10 +756,10 @@ describe('Accessibility', function () {
 
 		        </code></pre>
 		      </figure>
-        </section>
+        </section> -->
 
         <section>
-	        <h3 style="margin-bottom:0;">Testing with axe-webdriverjs <span class="offscreen">2 of 2</span></h3>
+	        <h3 style="margin-bottom:0;">Testing with axe-webdriverjs</h3>
 	        <figure class="code">
         		<figcaption><a href="http://bit.ly/react-axe-webdriver-demo">http://bit.ly/react-axe-webdriver-demo</a></figcaption>
 		        <pre class="smaller"><code class="javascript"> const WebDriver = require('selenium-webdriver'),
@@ -798,16 +805,28 @@ describe('Accessibility', function () {
 		      </figure>
         </section>
 
-        <section>
+        <!-- <section>
 	        <h3 class="h1-style">Testing Demo</h3>
-        </section>
+	        <pre class="large"><code class="javascript">
+  it('should be usable from the keyboard', function () {
+    cy.visit('http://localhost:8080');
+    
+    const services = cy.get('#services').children();
+
+    services.first().type('{enter}');
+    
+    services.first().should('have.class', 'active');
+  });
+ 					</code></pre>
+        </section> -->
 
         <section>
-	        <h3 class="h2-style">Accessibility Testing Tools</h3>
+	        <h3 class="h2-style">Accessibility Testing APIs</h3>
 	        <ul>
 	        	<li><a href="https://github.com/dequelabs/axe-core">axe-core</a></li>
 		        <li><a href="https://github.com/dequelabs/axe-webdriverjs">axe-webdriverjs</a></li>
 		        <li><a href="https://github.com/dylanb/react-axe">React-axe</a></li>
+		        <li><a href="https://github.com/evcohen/eslint-plugin-jsx-a11y">eslint-plugin-jsx-a11y</a></li>
 		        <li><a href="https://github.com/reactjs/react-a11y">React-a11y</a></li>
 	        </ul>
         </section>
@@ -815,11 +834,12 @@ describe('Accessibility', function () {
         <section>
         	<h3 class="h2-style">Wrap It Up</h3>
         	<ul>
-        		<li>A11y + JavaScript ❤️</li>
+        		<li>A11y + React.js ❤️</li>
         		<li>The basics matter</li>
         		<li>Get skilled at focus management</li>
         		<li>Test, test, test!</li>
         	</ul>
+        	<p><a href="https://egghead.io/courses/start-building-accessible-web-applications-today">https://egghead.io/courses/start-building-accessible-web-applications-today</a></p>
         </section>
 
         <!-- <section>
