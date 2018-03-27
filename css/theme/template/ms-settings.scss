@@ -5,30 +5,58 @@
 $backgroundColor: #000;
 
 // Primary/body text
-$mainFont: 'Lato', sans-serif;
+$mainFont: 'RobotoDraft', sans-serif;
+$secondaryFont: 'Allan', cursive;
+$codeFont: Menlo, monospace;
 $mainFontSize: 36px;
-$mainColor: #eee;
+
+// Colors
+$darkColor: #000;
+$transparentBlack: rgba(0, 0, 0, 0.85);
+$white: #fff;
+$alertColor: #ff0000;
+$secondaryColor: #999;
+$tertiaryColor: #ccc;
+$mutedColor: #999;
+
+$codeBackgroundColor: $darkColor;
+$mainColor: $white;
+$headingColor: $mainColor;
 
 // Headings
 $headingMargin: 0 0 20px 0;
-$headingFont: 'League Gothic', Impact, sans-serif;
-$headingColor: #eee;
-$headingLineHeight: 0.9em;
+$headingFont: $mainFont, sans-serif; //'Aleo Bold', Impact, sans-serif;
+$headingFontWeight: 500;
+$headingLineHeight: 1em;
 $headingLetterSpacing: 0.02em;
-$headingTextTransform: uppercase;
-$headingTextShadow: 0px 0px 6px rgba(0,0,0,0.2);
-$heading1TextShadow: $headingTextShadow;
+$headingTextTransform: none;
+$headingTextShadow: 2px 2px 6px #000;
+$paragraphTextShadow: 1px 3px 3px #000;
+$paragraphFontSize: 1.5em;
+$paragraphLineHeight: 1.25em;
 
 // Links and actions
-$linkColor: #cff110;
-$linkColorHover: #97948f;
+$linkColor: #E3C402;
+$linkColorHover: #fff;
+$altLinkColor: #55491F;
+$buttonColor: #4285f4;
+$buttonTextColor: $white;
+
+$separatorColor: darken($mainColor, 20%);
+$separatorHeight: 3px;
+
+$terminalFontSize: 17px;
+$terminalFontFamily: $codeFont, monospace;
 
 // Text selection
 $selectionBackgroundColor: #97948f;
-$selectionColor: #fff;
+$selectionColor: $white;
 
 // Generates the presentation background, can be overridden
 // to return a background image or gradient
 @mixin bodyBackground() {
 	background: $backgroundColor;
 }
+
+// breakpoints
+$mobile: "(max-width: 600px)";

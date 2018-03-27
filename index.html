@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>CSUN '17 Accessibility and React.js - Marcy Sutton</title>
+		<title>Accessibility and the Virtual DOM - Marcy Sutton</title>
 
 		<meta name="description" content="A presentation on how React.js impacts accessibility, from user experience to automated testing.">
 		<meta name="author" content="Marcy Sutton">
@@ -14,21 +14,22 @@
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
+		<link href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,400italic" rel="stylesheet" type="text/css">
+
 		<link rel="stylesheet" href="css/reveal.css">
 
 		<link rel="stylesheet" href="plugin/accessibility-helpers/accessibility-helper.css">
-		<link rel="stylesheet" href="css/theme/custom.css" id="theme">
 
 		<!-- Code syntax highlighting -->
-		<link rel="stylesheet" href="lib/css/tomorrow.css">
+		<link rel="stylesheet" href="lib/css/monokai_sublime.css">
 
 		<!-- Printing and PDF exports -->
 		<script>
 			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/theme/marcysutton.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
 
 		<!--[if lt IE 9]>
@@ -41,32 +42,27 @@
 		<div class="reveal">
 			<div class="slides">
 				<!-- <div class="slide-padding"> -->
-				<section data-background-color="#fff" class="deque-title-slide">
-					<div class="left">
-						<img src="img/deque-logo.png" alt="Deque" class="plain deque">
-					</div>
-					<div class="right">
-						<h1>Explorations in the Virtual DOM: How React.js Impacts Accessibility</h1>
-						<p>
-							By <a href="http://marcysutton.com">Marcy Sutton</a> / <a href="http://twitter.com/marcysutton">@MarcySutton</a><br>
-							Senior Front-End Engineer, Deque Systems
-						</p>
-					</div>
+				<section data-state="title-slide">
+					<h1>Explorations in the Virtual DOM: How React.js Impacts Accessibility</h1>
+					<p>
+						By <a href="http://marcysutton.com">Marcy Sutton</a> / <a href="http://twitter.com/marcysutton">@MarcySutton</a><br>
+						Senior Front-End Engineer, Deque Systems
+					</p>
 				</section>
 
-        <section>
+        <!-- <section>
 	        <h2 class="h1-style">React.js</h2>
 	        <h3>A JavaScript view-rendering library by Facebook</h3>
 	        <img data-src="img/React.js_logo.png" alt="React logo" style="max-height: 400px;" class="plain">
         </section>
-
+ -->
         <section>
         	<h3 class="h2-style" style="margin-bottom: 0">The JavaScript Hotness</h3>
 	        <img data-src="img/react-hype.jpg" alt="JavaScript frameworks over the years: each one is 'so hot right now'" class="plain" style="max-width: 750px;">
         </section>
 
         <section>
-	        <h3 class="h1-style">What made React.js different</h3>
+	        <h3 class="h2-style">What made React.js different</h3>
 	        <ul class="larger">
 		        <li>Virtual DOM</li>
 	        	<li>Component lifecycle</li>
@@ -77,7 +73,8 @@
         </section>
 
         <section>
-	        <h2 class="h1-style">Accessibility in React Apps</h2>
+	        <h2 class="">Accessibility in React Apps</h2>
+	        <p><a href="https://reactjs.org/docs/accessibility.html">https://reactjs.org/docs/accessibility.html</a></p>
 	        <ul class="larger">
 		        <li>Virtual DOM</li>
 		        <li>HTML in JS</li>
@@ -99,23 +96,45 @@
         <section data-background-image="img/virtual-dom.png" data-background-size="contain">
 	        <h2 class="offscreen">Virtual DOM diagram</h2>
 	        <figure class="offscreen"><a href="http://stackoverflow.com/questions/21109361/why-is-reacts-concept-of-virtual-dom-said-to-be-more-performant-than-dirty-mode">Source</a></figure>
+	        <aside class="notes">
+	        	Makes the main thread more efficient by minimizing and batching updates
+	        </aside>
         </section>
 
         <section>
-        	<h3 class="h2-style">Component Instantiation</h3>
+        	<h2>axe-core &amp; Virtual DOM ❤️</h2>
+        	<figure class="code">
+        		<ficaption><a href="https://github.com/dequelabs/axe-core/blob/develop/doc/developer-guide.md#api-name-axeutilsgetflattenedtree">https://github.com/dequelabs/axe-core/blob/develop/doc/developer-guide.md</a></ficaption>
+	        	<pre class="large"><code class="javascript">
+  var element = document.body;
+  axe.utils.getFlattenedTree(element, shadowId)
+
+  //returns:
+  [{
+    actualNode: body,
+    children: [virtualNodes],
+    shadowId: undefined
+  }]
+					</code></pre>
+        </section>
+
+        <section>
+        	<h3 class="h2-style">Component Lyfe</h3>
 	        <figure class="code">
-	        	<pre class="large"><code class="javascript">  var AdoptAPetViewer = React.createClass({
-    componentDidMount: function() {},
-
-    componentDidUpdate: function() {},
-
-    render: function() {
-      return (&lt;div>Your Sweet Accessible App&lt;/div>);
+	        	<pre class="large"><code class="javascript">  import React from 'react';
+  class AdoptAPetViewer extends React.Component {
+    constructor(props) {
+      super(props)
     }
-  });
+    componentDidMount: function() {},
+    componentDidUpdate: function() {},
+    render() {
+      return (&lt;div>Your Sweet Accessible App&lt;/div>)
+    }
+  }
   window.addEventListener('DOMContentLoaded', function() {
-    React.render(&lt;AdoptAPetViewer />, document.body);
-  });
+    React.render(&lt;AdoptAPetViewer />, document.getElementById('root'))
+  })
 	        	</code></pre>
 	        </figure>
         </section>
@@ -148,24 +167,24 @@
         <section style="padding-top: 0 !important;">
 	        <h3 class="h2-style" style="margin-bottom: 0;"> HTML in JS</h3>
 	        <figure class="code">
-						<figcaption>https://github.com/davidtheclark/react-aria-menubutton</figcaption>
-	        	<pre><code class="javascript">  import { Wrapper, Button, Menu, MenuItem } from '../..';
+						<figcaption><a href="https://github.com/davidtheclark/react-aria-menubutton">https://github.com/davidtheclark/react-aria-menubutton</a></figcaption>
+	        	<pre><code class="javascript">  import { Wrapper, Button, Menu, MenuItem } from '../../src';
 
   render() {
     return (
-      &lt;Wrapper
-        className='AriaMenuButton'
-        onSelection={this.handleSelection.bind(this)}
-      >
-        &lt;Button className='AriaMenuButton-trigger'>
+      <div>
+        <Wrapper
+          className="AriaMenuButton"
+          onSelection={this.handleSelection.bind(this)}
+        >
+          <Button className="AriaMenuButton-trigger">
           Select a word
-        &lt;/Button>
-        &lt;Menu>
-          &lt;ul className='AriaMenuButton-menu'>
-            {menuItemElements}
-          &lt;/ul>
-        &lt;/Menu>
-      &lt;/Wrapper>
+          </Button>
+          <Menu>
+            <ul className="AriaMenuButton-menu">{menuItemElements}</ul>
+          </Menu>
+        </Wrapper>
+      </div>
     );
   }
 						</code></pre>
@@ -176,45 +195,43 @@
 	        <h3 class="h2-style" style="margin: 0;">A component under the hood</h3>
 	        <figure class="code">
 						<figcaption><a href="https://github.com/davidtheclark/react-aria-menubutton">https://github.com/davidtheclark/react-aria-menubutton</a></figcaption>
-	        	<pre><code class="javascript">  var React = require('react');
+	        	<pre><code class="javascript">  const React = require('react');
+  const PropTypes = require('prop-types');
+  const specialAssign = require('./specialAssign');
 
-  var checkedProps = {
-    children: React.PropTypes.node.isRequired,
-    disabled: React.PropTypes.bool,
-    tag: React.PropTypes.string,
+  const checkedProps = {
+    children: PropTypes.node.isRequired,
+    disabled: PropTypes.bool,
+    tag: PropTypes.string
   };
 
-  module.exports = React.createClass({
-    displayName: 'AriaMenuButton-Button',
+  class AriaMenuButtonButton extends React.Component {
+    static propTypes = checkedProps;
 
-    propTypes: checkedProps,
+    static contextTypes = {
+      ambManager: PropTypes.object.isRequired
+    };
 
-    contextTypes: {
-      ambManager: React.PropTypes.object.isRequired,
-    },
+    static defaultProps = { tag: 'span' };
 
-    getDefaultProps: function() {
-      return { tag: 'span' };
-    },
-
-    componentWillMount: function() {
+    componentWillMount() {
       this.context.ambManager.button = this;
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
       this.context.ambManager.destroy();
-    },
+    }
 
-    handleKeyDown: function(event) {
+    handleKeyDown = event => {
       if (this.props.disabled) return;
 
-      var ambManager = this.context.ambManager;
+      const ambManager = this.context.ambManager;
 
       switch (event.key) {
         case 'ArrowDown':
           event.preventDefault();
           if (!ambManager.isOpen) {
-            ambManager.openMenu({ focusMenu: true });
+            ambManager.openMenu();
           } else {
             ambManager.focusItem(0);
           }
@@ -227,68 +244,61 @@
         case 'Escape':
           ambManager.handleMenuKey(event);
           break;
+        default:
+          // (Potential) letter keys
+          ambManager.handleButtonNonArrowKey(event);
       }
-    },
+    };
 
-    handleClick: function() {
+    handleClick = () => {
       if (this.props.disabled) return;
-      this.context.ambManager.toggleMenu();
-    },
+      this.context.ambManager.toggleMenu({}, { focusMenu: false });
+    };
 
-    render: function() {
-     var props = this.props;
+    render() {
+      const props = this.props;
 
-      var buttonProps = {
+      const buttonProps = {
         // "The menu button itself has a role of button."
         role: 'button',
-        tabIndex: (props.disabled) ? '' : '0',
-        // "The menu button has an aria-haspopup property, 
-        // set to true."
+        tabIndex: props.disabled ? '' : '0',
+        // "The menu button has an aria-haspopup property, set to true."
         'aria-haspopup': true,
         'aria-expanded': this.context.ambManager.isOpen,
         'aria-disabled': props.disabled,
         onKeyDown: this.handleKeyDown,
         onClick: this.handleClick,
-        onBlur: this.context.ambManager.handleBlur,
+        onBlur: this.context.ambManager.handleBlur
       };
 
-      return React.createElement(
-      	props.tag,
-      	buttonProps,
-      	props.children
-      );
-    },
-  });
+      specialAssign(buttonProps, props, checkedProps);
+
+      return React.createElement(props.tag, buttonProps, props.children);
+    }
+  }
+
+  module.exports = AriaMenuButtonButton;
 						</code></pre>
 					</figure>
         </section>
 
         <section>
-	        <h3 class="h2-style" style="margin-bottom:0;">IDE Linting</h3>
-	        <h4><a href="https://github.com/evcohen/eslint-plugin-jsx-a11y">https://github.com/evcohen/eslint-plugin-jsx-a11y</a></h4>
-	        <figure>
-	        	<img data-src="img/jsx-plugin.png" style="max-width: 1000px;" alt="Eslint plugin for JSX templating and accessibility on Github">
-	        </figure>
+        	<h3 class="h2-style">POUR me a coffee ☕️</h3>
+        	<h3 class="h4-style"><a href="https://www.w3.org/WAI/WCAG21/Understanding/">https://www.w3.org/WAI/WCAG21/Understanding</a></h3>
+        	<ul>
+        		<li>Perceivable</li>
+        		<li>Operable</li>
+        		<li>Understandable</li>
+        		<li>Robust</li>
+        	</ul>
+        </section>
+
+        <section data-background-image="img/aria-authoring-practices.png" data-background-position="top center">
+        	<h3 class="offscreen">ARIA Authoring Practices 1.1</h3>
         </section>
 
         <section>
-        	<h3 class="h2-style" style="margin-bottom: 0;">React-a11y</h3>
-        	<h4><a href="https://github.com/reactjs/react-a11y">https://github.com/reactjs/react-a11y</a></h4>
-	        <figure>
-	        	<img data-src="img/react-a11y.png" alt="Command line warning about a click handler on a DIV">
-	        </figure>
-        </section>
-
-        <section>
-        	<h3 class="h2-style" style="margin-bottom: 0;">React-axe</h3>
-        	<h4><a href="https://github.com/dylanb/react-axe">https://github.com/dylanb/react-axe</a></h4>
-	        <figure>
-	        	<img data-src="img/react-axe.png" style="max-width: 1000px;" alt="React-axe open in the browser">
-	        </figure>
-        </section>
-
-        <section>
-	        <h3 class="h1-style">User-Input Events</h3>
+	        <h3 class="h1-style">User-Input Events in React</h3>
 	        <ul>
 		        <li class="fragment">Virtual DOM</li>
 		        <li class="fragment">Dynamic HTML w/ JS</li>
@@ -312,7 +322,7 @@
         <section style="padding-top: 0 !important">
 	        <h3 class="h2-style" style="margin-bottom: 0;">Binding Events in React</h3>
 	        <figure class="code">
-	        	<pre><code class="javascript"> let PizzaButton = React.createClass({
+	        	<pre><code class="javascript"> class PizzaButton extends React.Component {
   handleClick(e) {}
   handleKeyDown(e) {}
 
@@ -328,7 +338,7 @@
   }
  })
 
- module.exports = PizzaButton
+ export default PizzaButton
 	        	</code></pre>
         	</figure>
         </section>
@@ -339,7 +349,7 @@
 	        	Things to watch out for:
 	        </h3>
 	        <ul class="large">
-	        	<li class="fragment">Bind to accessible elements</li>
+	        	<li class="fragment">Bind to keyboard-accessible widgets</li>
 	        	<li class="fragment"><code>SyntheticEvent</code> is a wrapper utility</li>
 	        	<li class="fragment">Capturing &amp; non-React events</li>
 	        </ul>
@@ -348,7 +358,7 @@
 
         <section>
 	        <h3 class="h1-style" style="margin-bottom:0;">Focus Management</h3>
-	        <p class="subhead">Not unique to React</p>
+	        <h4>Critical in client-rendered apps</h4>
 	        <figure class="fragment" style="max-width: 70%; margin: 1em auto;"><em><a href="https://www.smashingmagazine.com/2015/05/client-rendered-accessibility/">https://www.smashingmagazine.com/2015/05/client-rendered-accessibility</a></em></figure>
         </section>
 
@@ -363,14 +373,14 @@
 	        <h3 style="margin-bottom:0;">Code Example 1</h3>
 	        <figure class="code">
 	        	<figcaption><a href="https://facebook.github.io/react/docs/refs-and-the-dom.html">https://facebook.github.io/react/docs/refs-and-the-dom.html</a></figcaption>
-		        <pre><code class="javascript"> class AutoFocusTextInput extends React.Component {
-  componentDidMount() {
+		        <pre><code class="javascript">  focus() {
     this.textInput.focus();
   }
 
   render() {
     return (
-      &lt;CustomTextInput
+      &lt;input
+        type="text"
         ref={(input) => { this.textInput = input; }}
       />
     );
@@ -408,12 +418,11 @@
 	        <figure class="code">
 	        	<figcaption>Attest DevTools Extension</figcaption>
 		        <pre><code class="javascript">  componentDidUpdate () {
-    // find DOM node in custom component instance
     const ourNode = ReactDOM.findDOMNode(this)
-    if (document.activeElement && 
-     ourNode.contains(document.activeElement)) {
-     // if focused el is a component child, bail out
-     return
+    if (document.activeElement &&
+    	ourNode.contains(document.activeElement)) {
+      // if the focussed element is a child of our DOM, return
+      return
     }
     // focus one of our elements
     ourNode.querySelector('button').focus()
@@ -423,14 +432,17 @@
         </section>
 
         <section>
-	        <h3>There are multiple focus management strategies</h3>
+	        <h3>There are multiple <br>focus management strategies</h3>
+	        <div>💁‍♀️</div>
 	        <ul>
 		        <li>User input event + focus on refs</li>
-		        <li>Assign focus via component state</li>
-		        <li>Focus on component mount/update</li>
+		        <li>Assign focus via component state callback</li>
+		        <li>Focus on component mount/update*</li>
+		        <li>Use context</li>
 		        <li class="fragment">Focus layer system (smarter)</li>
 	        </ul>
 	        <aside class="notes">
+	        	If your component re-renders too much and it has auto-focusing, that could be a nightmare if it steals focus. TEST TEST TEST
 	        <ul>
 	        	<li>Use context</li>
 						<li>Focus/blur bubbling and timeouts</li>
@@ -440,8 +452,63 @@
 	        </aside>
         </section>
 
+        <section data-background-image="img/keystroke-level-performance.png" data-background-size="50% auto" data-background-position="top center" data-background-color="#fff">
+        	<h3 class="offscreen">Flipping Performance on its head</h3>
+        </section>
+
         <section>
-	        <h2>React.js Testing and Accessibility</h2>
+		        <img data-src="img/keanu-web-performance.jpg" alt="Conspiracy Keanu: What if Performance is actually about limits on human memory" style="min-height:700px">
+        </section>
+
+        <section>
+        	<h2 class="h3-style">User Impact:</h2>
+        	<h3 class="h2-style">Interacting with the keyboard</h3>
+        	<ul>
+	        	<li class="fragment">Are you waiting for oodles of JS to load?</li>
+	        	<li class="fragment">Is the UI thread blocked?</li>
+	        	<li class="fragment">Does the UI depend on JS for everything?</li>
+        	</ul>
+        	<aside class="notes">
+        	Do as much enabling of functionality without JS as possible. Use native HTML and let it load on the server-side.
+        	How long does it take to become interactive?
+
+        	What is in the critical path code: is it just visual style stuff?
+        	</aside>
+        </section>
+
+        <section>
+        	<p class="h3-style">User Impact:</p>
+        	<h3 class="h2-style">Assistive Technology</h3>
+        	<ul>
+	        	<li class="fragment">Are you waiting for JS to build the DOM?</li>
+	        	<li class="fragment">What is the loading experience like?</li>
+	        	<li class="fragment">Is the Accessibility Tree slow to update?</li>
+        	</ul>
+        	<aside class="notes">
+        	Loading of the accessibility tree, how it is impacted by slow loading. Explanation of the CNN example
+        	</aside>
+        </section>
+
+        <section>
+        	<p class="subhead">Optimization:</p>
+        	<h3 class="h2-style">Use as many browser defaults as possible</h3>
+        	<ul>
+        		<li class="fragment">Buttons &amp; links</li>
+        		<li class="fragment">HTML5 inputs</li>
+	        	<li class="fragment">Focus styles</li>
+        	</ul>
+        	<p class="fragment">Everything you customize has to be sent over the wire.</p>
+        </section>
+
+        <section>
+		    	<p class="subhead">Optimization:</p>
+		    	<h3 class="h2-style">Include keyboard support<br>in the <a href="https://developers.google.com/web/fundamentals/performance/critical-rendering-path/?hl=en">critical rendering path</a></h3>
+		    	<img data-src="img/critical_rendering_path.png" alt="Critical Rendering Path diagram" style="max-width: 600px;">
+		    	<p>Prioritize accessible interactions.</p>
+	        </section>
+
+        <section>
+	        <h2>Testing and Accessibility</h2>
 	        <ul>
 		        <li>Unit tests</li>
 		        <li>Integration tests</li>
@@ -517,7 +584,7 @@
 		    </section>
 
 		    <section>
-			    <h3>Accessibility Tests<br>Requiring More than Shallow DOM</h3>
+			    <h3>Tests Requiring More than Shallow DOM</h3>
 			    <ul>
 				    <li>Computed name and role</li>
 				    <li>Color contrast</li>
@@ -607,7 +674,7 @@ describe('Accessibility', function () {
         </section>
 
         <section>
-	        <h3 class="h2-style">The dreaded <code>documentElement</code> error</h3>
+	        <h3>The dreaded <code>documentElement</code> error</h3>
 	        <figure><img data-src="img/jsdom-mocha-exploded.png" alt="Command line Mocha test stack trace saying documentElement exploded!"></figure>
         </section>
 
@@ -642,7 +709,7 @@ describe('Accessibility', function () {
         </section>
 
         <section>
-	        <h3>Integration Test Considerations</h3>
+	        <h3 class="h2-style">Integration Test Considerations</h3>
 	        <ul>
 		        <li>Test components together</li>
 		        <li>Slower, more processor heavy</li>
@@ -657,26 +724,29 @@ describe('Accessibility', function () {
         		<figcaption><a href="http://bit.ly/react-axe-webdriver-demo">http://bit.ly/react-axe-webdriver-demo</a></figcaption>
 		        <pre class="smaller"><code class="javascript">{
   "name": "react-axe-webdriverjs-demo",
-  "version": "0.1.0",
+  "description": "Demonstrating how to use axe-webdriverjs in a React project",
+  "version": "0.2.0",
+  "author": "Marcy Sutton",
+  "private": true,
+  "devDependencies": {
+    "axe-webdriverjs": "^2.0.0-alpha.1",
+    "chai": "^3.5.0",
+    "mocha": "^3.5.3",
+    "react-scripts": "0.8.4"
+  },
+  "dependencies": {
+    "react": "^15.6.2",
+    "react-dom": "^15.6.2"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "webdriver": "mocha test/test.js"
-  },
-  "devDependencies": {
-    "axe-core": "^2.1.7",
-    "axe-webdriverjs": "^1.0.14",
-    "chai": "^3.5.0",
-    "mocha": "^3.2.0",
-    "react-scripts": "0.8.4"
-  },
-  "dependencies": {
-    "react": "^15.4.1",
-    "react-dom": "^15.4.1"
+    "webdriver": "mocha e2e-test/test.js"
   }
 }
+
 		        </code></pre>
 		      </figure>
         </section>
@@ -729,20 +799,30 @@ describe('Accessibility', function () {
         </section>
 
         <section>
-	        <h3 class="h1-style">Command-Line Demo</h3>
+	        <h3 class="h1-style">Testing Demo</h3>
         </section>
 
         <section>
-	        <h3 class="h2-style">React Accessibility Tools</h3>
+	        <h3 class="h2-style">Accessibility Testing Tools</h3>
 	        <ul>
-	        	<li><a href="https://github.com/evcohen/eslint-plugin-jsx-a11y">eslint-plugin-jsx-a11y</a></li>
+	        	<li><a href="https://github.com/dequelabs/axe-core">axe-core</a></li>
+		        <li><a href="https://github.com/dequelabs/axe-webdriverjs">axe-webdriverjs</a></li>
 		        <li><a href="https://github.com/dylanb/react-axe">React-axe</a></li>
 		        <li><a href="https://github.com/reactjs/react-a11y">React-a11y</a></li>
-		        <li><a href="https://github.com/dequelabs/axe-webdriverjs">axe-webdriverjs</a></li>
 	        </ul>
         </section>
 
         <section>
+        	<h3 class="h2-style">Wrap It Up</h3>
+        	<ul>
+        		<li>A11y + JavaScript ❤️</li>
+        		<li>The basics matter</li>
+        		<li>Get skilled at focus management</li>
+        		<li>Test, test, test!</li>
+        	</ul>
+        </section>
+
+        <!-- <section>
 	        <h3>Blessed React.js Components</h3>
 	        <ul>
 		        <li><a href="http://davidtheclark.com/building-react-aria-menubutton/">react-aria-menubutton</a></li>
@@ -750,7 +830,7 @@ describe('Accessibility', function () {
 		        <li><a href="https://github.com/reactjs/react-autocomplete">react-autocomplete</a></li>
 		        <li><a href="https://github.com/reactjs/react-tabs">react-tabs</a></li>
 	        </ul>
-        </section>
+        </section> -->
 
 				<section>
 					<h2>Questions?</h2>
@@ -768,8 +848,15 @@ describe('Accessibility', function () {
 			// Full list of configuration options available at:
 			// https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
-			    width: '100%',
-			    margin: 0,
+			  width: 1440,
+		    height: 900,
+
+		    // Factor of the display size that should remain empty around the content
+		    margin: 0.1,
+
+		    // Bounds for smallest/largest possible scale to apply to content
+		    minScale: 0.2,
+		    maxScale: 1.0,
 				controls: true,
 				progress: true,
 				history: true,
