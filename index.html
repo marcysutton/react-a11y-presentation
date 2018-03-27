@@ -761,11 +761,11 @@ describe('Accessibility', function () {
         <section>
 	        <h3 style="margin-bottom:0;">Testing with axe-webdriverjs</h3>
 	        <figure class="code">
-        		<figcaption><a href="http://bit.ly/react-axe-webdriver-demo">http://bit.ly/react-axe-webdriver-demo</a></figcaption>
+        		<figcaption><a href="http://bit.ly/a11y-demo-app">http://bit.ly/a11y-demo-app</a></figcaption>
 		        <pre class="smaller"><code class="javascript"> const WebDriver = require('selenium-webdriver'),
        AxeBuilder = require('axe-webdriverjs');
 
- describe('aXe demo', function() {
+ describe('Accessibility', function() {
     this.timeout(10000);
     let driver;
 
@@ -773,7 +773,11 @@ describe('Accessibility', function () {
       driver = new WebDriver.Builder()
         .forBrowser('chrome')
         .build();
-      done();
+      driver
+        .get(`http://localhost:${port}`)
+        .then(function() {
+          done();
+        });
     });
 
     afterEach(function(done) {
@@ -782,19 +786,16 @@ describe('Accessibility', function () {
       });
     });
 
-  it('should find no accessibility violations', function(  done) {
-    driver
-      .get('http://localhost:3000/')
-      .then(function () {
+    it('should find no violations in the modal', function(done) {
+      driver
+        .findElement(WebDriver.By.css('.signup-btn'))
+        .then(function(element) {
+          element.sendKeys(WebDriver.Key.ENTER)
+      })
+      .then(function() {
         new AxeBuilder(driver)
           .analyze(function (results) {
-            if (results.violations.length > 0) {
-              console.log(results.violations.length + ' Accessibility Violations');
-              console.log(results.violations);
-            }
-            else {
-              console.log('No accessibility violations');
-            }
+            TestUtils.printViolations(results.violations);
             assert.equal(results.violations.length, 0);
             done();
           });
