@@ -245,6 +245,9 @@ body {
 .reveal h3 strong {
   color: #E3C402; }
 
+.reveal .subhead {
+  display: block; }
+
 .reveal .larger {
   font-size: 120%; }
 
